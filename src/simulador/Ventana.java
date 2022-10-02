@@ -25,7 +25,7 @@ public class Ventana extends javax.swing.JFrame {
 
         Box = new javax.swing.JComboBox<>();
         pizarron = new javax.swing.JPanel();
-        jSlider1 = new javax.swing.JSlider();
+        T = new javax.swing.JSlider();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         AltInicial = new javax.swing.JCheckBox();
@@ -36,6 +36,7 @@ public class Ventana extends javax.swing.JFrame {
         VI = new javax.swing.JTextField();
         Teta = new javax.swing.JTextField();
         HI = new javax.swing.JTextField();
+        Borrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,11 +53,11 @@ public class Ventana extends javax.swing.JFrame {
             .addGap(0, 500, Short.MAX_VALUE)
         );
 
-        jSlider1.setBackground(java.awt.Color.lightGray);
-        jSlider1.setMajorTickSpacing(20);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
-        jSlider1.setValue(0);
+        T.setBackground(java.awt.Color.lightGray);
+        T.setMajorTickSpacing(20);
+        T.setPaintLabels(true);
+        T.setPaintTicks(true);
+        T.setValue(0);
 
         jRadioButton1.setBackground(java.awt.Color.lightGray);
         jRadioButton1.setText("Grados");
@@ -89,6 +90,13 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        Borrar.setText("Borrar");
+        Borrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BorrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -118,12 +126,12 @@ public class Ventana extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Borrar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(T, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(pizarron, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
@@ -156,9 +164,11 @@ public class Ventana extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(T, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
-                        .addComponent(jButton1)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(Borrar))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -174,27 +184,54 @@ public class Ventana extends javax.swing.JFrame {
         int alto = pizarron.getHeight ( );
         int x0 = ancho/2 ;
         int y0 = alto/2 ;
-        
+        //dibujar plano
         lapiz2D.drawLine (0 , y0 , ancho , y0 ) ;
         lapiz2D.drawLine (x0 , 0 , x0 , alto ) ;
         
         //Estilo para la linea
-        lapiz2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        //Ancho de la linea
-        lapiz2D.setStroke(new BasicStroke(2F));
-        lapiz.setColor(Color.blue);
-        //limites de dibujo
-        for (int i = -360; i <= ancho; i++) {
-            int xi = i + (x0 - 180);
-            lapiz2D.drawLine(xi,
-                    (int) (Math.sin(Math.toRadians(i)) * 100) + y0, xi,
-                    (int) (Math.sin(Math.toRadians(i)) * 100) + y0);
+        lapiz2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);       
+        //Velocidad inicial
+        int V= Integer.parseInt(VI.getText());
+        //grado de lanzamiento
+        double O= Double.parseDouble(Teta.getText());
+        //altura inicial
+        int Y= Integer.parseInt(HI.getText());
+        //Tiempo
+        int t=(T.getValue())/10;
+        //gravedad
+        final double  g = 9.807;
+        
+        //dibujar parabola
+        for (double i = 0; i <= ancho; i+=0.01) { 
+            lapiz.setColor(Color.red); 
+            lapiz2D.setStroke(new BasicStroke(2F));
+            lapiz2D.drawLine((int) ((V * Math.cos(Math.toRadians(O)) * i)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * i )-(( g *Math.pow(i, 2))/2))), (int) ((V * Math.cos(Math.toRadians(O)) * i)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * i )-(( g *Math.pow(i, 2))/2))));
         }
+        
+        //Ancho del punto en linea
+        lapiz.setColor(Color.blue);
+        lapiz2D.setStroke(new BasicStroke(4F));
+        lapiz2D.drawLine((int) ((V * Math.cos(Math.toRadians(O)) * t)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * t )-(( g *Math.pow(t, 2))/2))), (int) ((V * Math.cos(Math.toRadians(O)) * t)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * t )-(( g *Math.pow(t, 2))/2))));
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void HIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HIActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HIActionPerformed
+
+    private void BorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarActionPerformed
+        lapiz = pizarron.getGraphics();
+        lapiz2D = (Graphics2D) lapiz;
+        int anchura = pizarron.getWidth();
+        int altura = pizarron.getHeight();
+        lapiz.setColor(Color.white);
+        lapiz.fillRect(0, 0, anchura, altura);
+        int x0 = anchura / 2;
+        int y0 = altura / 2;
+        lapiz2D.setColor(Color.magenta);
+        lapiz2D.drawLine(0, y0, anchura, y0);
+        lapiz2D.drawLine(x0, 0, x0, altura);
+    }//GEN-LAST:event_BorrarActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -224,8 +261,10 @@ public class Ventana extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox AltInicial;
+    private javax.swing.JButton Borrar;
     private javax.swing.JComboBox<String> Box;
     private javax.swing.JTextField HI;
+    private javax.swing.JSlider T;
     private javax.swing.JTextField Teta;
     private javax.swing.JTextField VI;
     private javax.swing.JButton jButton1;
@@ -234,7 +273,6 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JPanel pizarron;
     // End of variables declaration//GEN-END:variables
 }
