@@ -201,18 +201,27 @@ public class Ventana extends javax.swing.JFrame {
         //gravedad
         final double  g = 9.807;
         
-        //dibujar parabola
-        for (double i = 0; i <= ancho; i+=0.01) { 
-            lapiz.setColor(Color.red); 
-            lapiz2D.setStroke(new BasicStroke(2F));
-            lapiz2D.drawLine((int) ((V * Math.cos(Math.toRadians(O)) * i)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * i )-(( g *Math.pow(i, 2))/2))), (int) ((V * Math.cos(Math.toRadians(O)) * i)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * i )-(( g *Math.pow(i, 2))/2))));
+        //Validar posicion o velocidad
+        if (Box.getSelectedIndex()==1) {
+            //dibujar parabola
+            for (double i = 0; i <= ancho; i+=0.01) { 
+                lapiz.setColor(Color.red); 
+                lapiz2D.setStroke(new BasicStroke(2F));
+                lapiz2D.drawLine((int) ((V * Math.cos(Math.toRadians(O)) * i)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * i )-(( g *Math.pow(i, 2))/2))), (int) ((V * Math.cos(Math.toRadians(O)) * i)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * i )-(( g *Math.pow(i, 2))/2))));
         }
-        
-        //Ancho del punto en linea
+        //Ancho del punto e impresión
         lapiz.setColor(Color.blue);
         lapiz2D.setStroke(new BasicStroke(4F));
         lapiz2D.drawLine((int) ((V * Math.cos(Math.toRadians(O)) * t)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * t )-(( g *Math.pow(t, 2))/2))), (int) ((V * Math.cos(Math.toRadians(O)) * t)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * t )-(( g *Math.pow(t, 2))/2))));
         
+        } else {
+            if (Box.getSelectedIndex()==2) {
+                lapiz.setColor(Color.yellow); 
+                lapiz2D.setStroke(new BasicStroke(2F));
+                lapiz2D.drawLine((int) ((V * Math.cos(Math.toRadians(O)) * t)+x0), (int) (y0-( Y +( V * Math.sin(Math.toRadians(O)) * t )-(( g *Math.pow(t, 2))/2))), (int) (x0+(V * Math.cos(Math.toRadians(O)))),  (int) (y0-(( V * Math.sin(Math.toRadians(O)))-( g*t))));
+            } else {
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void HIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HIActionPerformed
